@@ -18,7 +18,7 @@ function makeFlowerSVG(color) {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
-        ${[0, 72, 144, 216, 288].map(angle => `
+        ${[0,72,144,216,288].map(angle => `
           <ellipse
             cx="13"
             cy="7"
@@ -61,7 +61,15 @@ function spawnFlowers() {
 
   if (prefersReducedMotion) return;
 
-  const count = 90;
+
+  /*
+    🌸🌸🌸
+    200 FLOWERS
+    🌸🌸🌸
+  */
+
+  const count = 200;
+
 
   for (let i = 0; i < count; i++) {
 
@@ -69,17 +77,25 @@ function spawnFlowers() {
 
     el.className = 'flower';
 
+
+    /* Random flower color */
+
     const color =
       flowerPalette[
-        Math.floor(Math.random() * flowerPalette.length)
+        Math.floor(
+          Math.random() *
+          flowerPalette.length
+        )
       ];
 
-    el.innerHTML = makeFlowerSVG(color);
+    el.innerHTML =
+      makeFlowerSVG(color);
 
 
     /* Random size */
 
-    const size = random(0.55, 1.45);
+    const size =
+      random(0.45, 1.4);
 
     el.style.setProperty(
       '--flower-scale',
@@ -87,63 +103,121 @@ function spawnFlowers() {
     );
 
 
-    /* Explosion direction */
+    /*
+      Wide upward explosion.
+
+      Flowers launch in different directions
+      instead of following identical paths.
+    */
 
     const angle =
-      random(Math.PI, Math.PI * 2);
+      random(
+        Math.PI * 0.05,
+        Math.PI * 0.95
+      );
 
-    const spread =
-      random(100, 330);
+    const distance =
+      random(100, 380);
+
 
     const tx =
-      Math.cos(angle) * spread;
+      Math.cos(angle) *
+      distance;
 
     const ty =
-      Math.sin(angle) * spread * random(0.7, 1.15)
-      - random(40, 120);
+      -Math.sin(angle) *
+      distance;
 
 
-    /* Falling movement */
+    /*
+      Gentle sideways drifting after
+      reaching the peak.
+    */
 
-    const fx =
-      random(-260, 260);
+    const driftX =
+      random(-180, 180);
 
-    const fy =
-      random(180, 520);
+    const driftY =
+      random(180, 450);
 
 
-    /* Rotation */
+    /*
+      Smooth rotation.
+    */
 
     const rot =
-      random(-720, 720);
+      random(-360, 360);
 
 
-    /* Speed */
+    /*
+      Longer duration makes everything
+      feel floaty rather than darting.
+    */
 
     const duration =
-      random(2.2, 4.2);
+      random(3.5, 6.5);
 
 
-    /* Stagger */
+    /*
+      Stagger flowers across the first
+      1.1 seconds.
+    */
 
     const delay =
-      random(0, 0.85);
+      random(0, 1.1);
 
 
-    el.style.setProperty('--tx', `${tx}px`);
-    el.style.setProperty('--ty', `${ty}px`);
-    el.style.setProperty('--fx', `${fx}px`);
-    el.style.setProperty('--fy', `${fy}px`);
-    el.style.setProperty('--rot', `${rot}deg`);
-    el.style.setProperty('--duration', `${duration}s`);
+    /* CSS variables */
 
-    el.style.animationDelay = `${delay}s`;
+    el.style.setProperty(
+      '--tx',
+      `${tx}px`
+    );
+
+    el.style.setProperty(
+      '--ty',
+      `${ty}px`
+    );
+
+    el.style.setProperty(
+      '--fx',
+      `${driftX}px`
+    );
+
+    el.style.setProperty(
+      '--fy',
+      `${driftY}px`
+    );
+
+    el.style.setProperty(
+      '--rot',
+      `${rot}deg`
+    );
+
+    el.style.setProperty(
+      '--duration',
+      `${duration}s`
+    );
 
 
-    /* Slightly random starting position */
+    /*
+      Individual animation delay.
+    */
 
-    const originX = random(-12, 12);
-    const originY = random(-8, 8);
+    el.style.animationDelay =
+      `${delay}s`;
+
+
+    /*
+      Slightly randomize the point where
+      the flower comes out of the envelope.
+    */
+
+    const originX =
+      random(-15, 15);
+
+    const originY =
+      random(-10, 10);
 
     el.style.left =
       `calc(50% + ${originX}px)`;
@@ -155,10 +229,14 @@ function spawnFlowers() {
     flowerLayer.appendChild(el);
 
 
+    /*
+      Clean up after animation.
+    */
+
     el.addEventListener(
       'animationend',
       () => el.remove(),
-      { once: true }
+      { once:true }
     );
   }
 }
@@ -171,17 +249,27 @@ function openEnvelope() {
   stage.classList.add('open');
 
 
-  /* Let the envelope start opening first */
+  /*
+    Envelope starts opening.
+    Then the flower explosion begins.
+  */
 
   setTimeout(() => {
+
     spawnFlowers();
+
   }, prefersReducedMotion ? 0 : 380);
 
 
-  /* Bring in the card */
+  /*
+    Card comes in after the explosion
+    has already started.
+  */
 
   setTimeout(() => {
+
     stage.classList.add('card-out');
+
   }, prefersReducedMotion ? 200 : 820);
 }
 
@@ -189,12 +277,14 @@ function openEnvelope() {
 envelopeWrap.addEventListener(
   'click',
   openEnvelope,
-  { once: true }
+  { once:true }
 );
 
 
 /* ---------- CARD FLIP ---------- */
 
 card.addEventListener('click', () => {
+
   card.classList.toggle('flipped');
+
 });
