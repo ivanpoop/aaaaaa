@@ -23,7 +23,7 @@ const flowerPalette = ['#E8794A', '#F7D9B8', '#E0A458', '#8FA876'];
 
 function spawnFlowers(){
   if (prefersReducedMotion) return;
-  const count = 16;
+  const count = 28;
   for (let i = 0; i < count; i++){
     const el = document.createElement('div');
     el.className = 'flower';
@@ -31,13 +31,13 @@ function spawnFlowers(){
     el.innerHTML = makeFlowerSVG(color);
 
     const angle = (Math.random() * Math.PI) + Math.PI; // upward-ish spread
-    const spread = 60 + Math.random() * 90;
+    const spread = 70 + Math.random() * 130;
     const tx = Math.cos(angle) * spread;
-    const ty = Math.sin(angle) * spread * 0.6 - 40;
-    const fx = (Math.random() - 0.5) * 40;
-    const fy = 90 + Math.random() * 60;
-    const rot = (Math.random() - 0.5) * 260;
-    const delay = Math.random() * 0.35;
+    const ty = Math.sin(angle) * spread * 0.6 - 50;
+    const fx = (Math.random() - 0.5) * 60;
+    const fy = 110 + Math.random() * 80;
+    const rot = (Math.random() - 0.5) * 320;
+    const delay = Math.random() * 0.4;
 
     el.style.setProperty('--tx', tx + 'px');
     el.style.setProperty('--ty', ty + 'px');
