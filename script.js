@@ -6,15 +6,12 @@ const card = document.getElementById('card');
 const prefersReducedMotion =
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-
-/* ---------- FLOWERS ---------- */
-
-function makeFlowerSVG(color) {
+function makeFlowerSVG(color, size = 26) {
   return `
     <svg
       viewBox="0 0 26 26"
-      width="26"
-      height="26"
+      width="${size}"
+      height="${size}"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
@@ -29,7 +26,6 @@ function makeFlowerSVG(color) {
             opacity="0.92"
           />
         `).join('')}
-
         <circle
           cx="13"
           cy="13"
@@ -41,7 +37,6 @@ function makeFlowerSVG(color) {
   `;
 }
 
-
 const flowerPalette = [
   '#E8794A',
   '#F7D9B8',
@@ -51,25 +46,73 @@ const flowerPalette = [
   '#FCE2BC'
 ];
 
-
 function random(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+function createFlowerField() {
+  const field = document.createElement('div');
+
+  field.className = 'flower-field';
+
+  flowerLayer.appendChild(field);
+
+  const fieldCount = 170;
+
+  for (let i = 0; i < fieldCount; i++) {
+
+    const flower = document.createElement('div');
+
+    flower.className = 'field-flower';
+
+    const color =
+      flowerPalette[
+        Math.floor(
+          Math.random() * flowerPalette.length
+        )
+      ];
+
+    const size = random(9, 19);
+
+    flower.innerHTML =
+      makeFlowerSVG(color, size);
+
+    const x = random(-5, 105);
+    const y = random(67, 101);
+
+    flower.style.left = `${x}%`;
+    flower.style.top = `${y}%`;
+
+    const depth = random(.65, 1);
+
+    flower.style.setProperty(
+      '--field-scale',
+      depth
+    );
+
+    flower.style.setProperty(
+      '--field-opacity',
+      random(.45, .9)
+    );
+
+    flower.style.setProperty(
+      '--field-rotation',
+      `${random(-25,25)}deg`
+    );
+
+    field.appendChild(flower);
+  }
+
+  requestAnimationFrame(() => {
+    field.classList.add('visible');
+  });
+}
 
 function spawnFlowers() {
 
   if (prefersReducedMotion) return;
 
-
-  /*
-    🌸🌸🌸
-    200 FLOWERS
-    🌸🌸🌸
-  */
-
-  const count = 200;
-
+  const count = 500;
 
   for (let i = 0; i < count; i++) {
 
@@ -77,97 +120,45 @@ function spawnFlowers() {
 
     el.className = 'flower';
 
-
-    /* Random flower color */
-
     const color =
       flowerPalette[
         Math.floor(
-          Math.random() *
-          flowerPalette.length
+          Math.random() * flowerPalette.length
         )
       ];
 
     el.innerHTML =
-      makeFlowerSVG(color);
+      makeFlowerSVG(
+        color,
+        random(16,31)
+      );
 
-
-    /* Random size */
-
-    const size =
-      random(0.45, 1.4);
+    const size = random(.45,1.35);
 
     el.style.setProperty(
       '--flower-scale',
       size
     );
 
-
-    /*
-      Wide upward explosion.
-
-      Flowers launch in different directions
-      instead of following identical paths.
-    */
-
     const angle =
       random(
-        Math.PI * 0.05,
-        Math.PI * 0.95
+        Math.PI * .02,
+        Math.PI * .98
       );
 
-    const distance =
-      random(100, 380);
-
+    const distance = random(120,470);
 
     const tx =
-      Math.cos(angle) *
-      distance;
+      Math.cos(angle) * distance;
 
     const ty =
-      -Math.sin(angle) *
-      distance;
+      -Math.sin(angle) * distance;
 
-
-    /*
-      Gentle sideways drifting after
-      reaching the peak.
-    */
-
-    const driftX =
-      random(-180, 180);
-
-    const driftY =
-      random(180, 450);
-
-
-    /*
-      Smooth rotation.
-    */
-
-    const rot =
-      random(-360, 360);
-
-
-    /*
-      Longer duration makes everything
-      feel floaty rather than darting.
-    */
-
-    const duration =
-      random(3.5, 6.5);
-
-
-    /*
-      Stagger flowers across the first
-      1.1 seconds.
-    */
-
-    const delay =
-      random(0, 1.1);
-
-
-    /* CSS variables */
+    const driftX = random(-280,280);
+    const driftY = random(180,500);
+    const rot = random(-540,540);
+    const duration = random(4.2,7.2);
+    const delay = random(0,1.4);
 
     el.style.setProperty(
       '--tx',
@@ -199,39 +190,16 @@ function spawnFlowers() {
       `${duration}s`
     );
 
-
-    /*
-      Individual animation delay.
-    */
-
     el.style.animationDelay =
       `${delay}s`;
 
-
-    /*
-      Slightly randomize the point where
-      the flower comes out of the envelope.
-    */
-
-    const originX =
-      random(-15, 15);
-
-    const originY =
-      random(-10, 10);
-
     el.style.left =
-      `calc(50% + ${originX}px)`;
+      `calc(50% + ${random(-20,20)}px)`;
 
     el.style.top =
-      `calc(44% + ${originY}px)`;
-
+      `calc(44% + ${random(-15,15)}px)`;
 
     flowerLayer.appendChild(el);
-
-
-    /*
-      Clean up after animation.
-    */
 
     el.addEventListener(
       'animationend',
@@ -239,40 +207,24 @@ function spawnFlowers() {
       { once:true }
     );
   }
+
+  setTimeout(() => {
+    createFlowerField();
+  }, 5200);
 }
-
-
-/* ---------- OPEN ENVELOPE ---------- */
 
 function openEnvelope() {
 
   stage.classList.add('open');
 
-
-  /*
-    Envelope starts opening.
-    Then the flower explosion begins.
-  */
-
   setTimeout(() => {
-
     spawnFlowers();
-
-  }, prefersReducedMotion ? 0 : 380);
-
-
-  /*
-    Card comes in after the explosion
-    has already started.
-  */
+  }, prefersReducedMotion ? 0 : 350);
 
   setTimeout(() => {
-
     stage.classList.add('card-out');
-
   }, prefersReducedMotion ? 200 : 820);
 }
-
 
 envelopeWrap.addEventListener(
   'click',
@@ -280,11 +232,6 @@ envelopeWrap.addEventListener(
   { once:true }
 );
 
-
-/* ---------- CARD FLIP ---------- */
-
 card.addEventListener('click', () => {
-
   card.classList.toggle('flipped');
-
 });
