@@ -1,11 +1,6 @@
-ChatGPT said:
-Yep — here are the two complete files with the changes included.
-
-script.js
 const stage = document.getElementById('stage');
 const envelopeWrap = document.getElementById('envelopeWrap');
 const flowerLayer = document.getElementById('flowerLayer');
-const cardWrap = document.getElementById('cardWrap');
 const card = document.getElementById('card');
 
 const prefersReducedMotion =
@@ -14,7 +9,7 @@ const prefersReducedMotion =
 
 /* ---------- FLOWERS ---------- */
 
-function makeFlowerSVG(color){
+function makeFlowerSVG(color) {
   return `
     <svg
       viewBox="0 0 26 26"
@@ -23,14 +18,14 @@ function makeFlowerSVG(color){
       xmlns="http://www.w3.org/2000/svg"
     >
       <g>
-        ${[0,72,144,216,288].map(a => `
+        ${[0, 72, 144, 216, 288].map(angle => `
           <ellipse
             cx="13"
             cy="7"
             rx="4.2"
             ry="6"
             fill="${color}"
-            transform="rotate(${a} 13 13)"
+            transform="rotate(${angle} 13 13)"
             opacity="0.92"
           />
         `).join('')}
@@ -57,20 +52,18 @@ const flowerPalette = [
 ];
 
 
-function random(min, max){
+function random(min, max) {
   return Math.random() * (max - min) + min;
 }
 
 
-function spawnFlowers(){
+function spawnFlowers() {
 
   if (prefersReducedMotion) return;
 
-  /* 90 flowers for maximum chaos 🌸 */
-
   const count = 90;
 
-  for (let i = 0; i < count; i++){
+  for (let i = 0; i < count; i++) {
 
     const el = document.createElement('div');
 
@@ -84,7 +77,7 @@ function spawnFlowers(){
     el.innerHTML = makeFlowerSVG(color);
 
 
-    /* Random flower size */
+    /* Random size */
 
     const size = random(0.55, 1.45);
 
@@ -94,7 +87,7 @@ function spawnFlowers(){
     );
 
 
-    /* Massive radial explosion */
+    /* Explosion direction */
 
     const angle =
       random(Math.PI, Math.PI * 2);
@@ -110,7 +103,7 @@ function spawnFlowers(){
       - random(40, 120);
 
 
-    /* Second movement phase */
+    /* Falling movement */
 
     const fx =
       random(-260, 260);
@@ -119,19 +112,19 @@ function spawnFlowers(){
       random(180, 520);
 
 
-    /* Huge random spins */
+    /* Rotation */
 
     const rot =
       random(-720, 720);
 
 
-    /* Different speeds */
+    /* Speed */
 
     const duration =
       random(2.2, 4.2);
 
 
-    /* Stagger the explosion */
+    /* Stagger */
 
     const delay =
       random(0, 0.85);
@@ -139,28 +132,18 @@ function spawnFlowers(){
 
     el.style.setProperty('--tx', `${tx}px`);
     el.style.setProperty('--ty', `${ty}px`);
-
     el.style.setProperty('--fx', `${fx}px`);
     el.style.setProperty('--fy', `${fy}px`);
-
     el.style.setProperty('--rot', `${rot}deg`);
+    el.style.setProperty('--duration', `${duration}s`);
 
-    el.style.setProperty(
-      '--duration',
-      `${duration}s`
-    );
-
-    el.style.animationDelay =
-      `${delay}s`;
+    el.style.animationDelay = `${delay}s`;
 
 
-    /* Slightly randomize the starting position */
+    /* Slightly random starting position */
 
-    const originX =
-      random(-12, 12);
-
-    const originY =
-      random(-8, 8);
+    const originX = random(-12, 12);
+    const originY = random(-8, 8);
 
     el.style.left =
       `calc(50% + ${originX}px)`;
@@ -175,43 +158,38 @@ function spawnFlowers(){
     el.addEventListener(
       'animationend',
       () => el.remove(),
-      { once:true }
+      { once: true }
     );
   }
 }
 
 
-/* ---------- ENVELOPE ---------- */
+/* ---------- OPEN ENVELOPE ---------- */
 
-function openEnvelope(){
+function openEnvelope() {
 
   stage.classList.add('open');
 
-  /* Envelope opens, then flowers explode */
+
+  /* Let the envelope start opening first */
 
   setTimeout(() => {
     spawnFlowers();
   }, prefersReducedMotion ? 0 : 380);
 
 
-  /* Card appears after the explosion begins */
+  /* Bring in the card */
 
   setTimeout(() => {
     stage.classList.add('card-out');
   }, prefersReducedMotion ? 200 : 820);
-
-
-  envelopeWrap.removeEventListener(
-    'click',
-    openEnvelope
-  );
 }
 
 
 envelopeWrap.addEventListener(
   'click',
   openEnvelope,
-  { once:true }
+  { once: true }
 );
 
 
