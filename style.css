@@ -39,6 +39,7 @@ body{
 }
 
 /* subtle grain */
+
 body::before{
   content:"";
   position:fixed;
@@ -48,6 +49,7 @@ body::before{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   mix-blend-mode:overlay;
 }
+
 
 /* ---------- STAGE ---------- */
 
@@ -60,6 +62,7 @@ body::before{
   justify-content:center;
 }
 
+
 /* ---------- ENVELOPE ---------- */
 
 .envelope-wrap{
@@ -67,9 +70,11 @@ body::before{
   width:300px;
   height:210px;
   cursor:pointer;
+
   transition:
     transform 0.9s cubic-bezier(.6,-0.1,.35,1.1),
     opacity 0.7s ease 0.5s;
+
   perspective:1200px;
 }
 
@@ -88,10 +93,13 @@ body::before{
 .env-body{
   position:absolute;
   inset:0;
+
   background:
     linear-gradient(155deg, #F0A16650, transparent 40%),
     var(--wine);
+
   border-radius:6px;
+
   box-shadow:
     0 30px 50px -20px var(--paper-shadow),
     0 8px 18px -6px rgba(0,0,0,0.4);
@@ -111,8 +119,14 @@ body::before{
   right:0;
   bottom:0;
   height:100%;
+
   background:var(--wine-dark);
-  clip-path:polygon(0 100%, 50% 42%, 100% 100%);
+
+  clip-path:polygon(
+    0 100%,
+    50% 42%,
+    100% 100%
+  );
 }
 
 .env-flap{
@@ -121,13 +135,30 @@ body::before{
   left:0;
   right:0;
   height:128px;
-  background:linear-gradient(160deg, #D68048, var(--wine));
-  clip-path:polygon(0 0, 100% 0, 50% 88%);
+
+  background:
+    linear-gradient(
+      160deg,
+      #D68048,
+      var(--wine)
+    );
+
+  clip-path:polygon(
+    0 0,
+    100% 0,
+    50% 88%
+  );
+
   transform-origin:top center;
   transform:rotateX(0deg);
-  transition:transform 1.1s cubic-bezier(.6,-0.15,.3,1.15);
+
+  transition:
+    transform 1.1s cubic-bezier(.6,-0.15,.3,1.15);
+
   z-index:3;
-  box-shadow:0 4px 10px rgba(0,0,0,0.25);
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.25);
 }
 
 .stage.open .env-flap{
@@ -138,10 +169,15 @@ body::before{
   position:absolute;
   top:96px;
   left:50%;
-  transform:translate(-50%,-50%);
+
+  transform:
+    translate(-50%,-50%);
+
   width:46px;
   height:46px;
+
   border-radius:50%;
+
   background:
     radial-gradient(
       circle at 32% 28%,
@@ -149,17 +185,23 @@ body::before{
       var(--gold) 60%,
       #a87d43 100%
     );
+
   box-shadow:
     0 3px 8px rgba(0,0,0,0.35),
     inset 0 -3px 4px rgba(0,0,0,0.25);
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   font-family:'Fraunces', serif;
   font-weight:600;
+
   color:var(--wine-dark);
   font-size:19px;
+
   z-index:4;
+
   transition:
     opacity 0.35s ease 0.15s,
     transform 0.5s ease 0.15s;
@@ -172,7 +214,10 @@ body::before{
 
 .stage.open .wax-seal{
   opacity:0;
-  transform:translate(-50%,-50%) scale(0.4);
+
+  transform:
+    translate(-50%,-50%)
+    scale(0.4);
 }
 
 .env-hint{
@@ -180,12 +225,17 @@ body::before{
   bottom:-34px;
   left:0;
   right:0;
+
   text-align:center;
+
   color:var(--blush);
+
   font-size:13px;
   letter-spacing:0.12em;
   text-transform:uppercase;
+
   opacity:0.65;
+
   animation:pulseHint 2.4s ease-in-out infinite;
 }
 
@@ -199,69 +249,134 @@ body::before{
   }
 }
 
+
 /* ---------- FLOWERS ---------- */
 
 .flower-layer{
   position:absolute;
   inset:0;
+
   pointer-events:none;
+
   z-index:5;
+
   overflow:visible;
 }
 
 .flower{
   position:absolute;
+
   left:50%;
   top:44%;
-  width:26px;
-  height:26px;
-  transform:translate(-50%,-50%) scale(0.3) rotate(0deg);
+
+  width:30px;
+  height:30px;
+
+  transform:
+    translate(-50%,-50%)
+    scale(0.05)
+    rotate(0deg);
+
   opacity:0;
+
   animation-name:burstFall;
-  animation-duration:1.9s;
-  animation-timing-function:cubic-bezier(.2,.7,.3,1);
+
+  animation-duration:
+    var(--duration, 3s);
+
+  animation-timing-function:
+    cubic-bezier(.12,.8,.2,1);
+
   animation-fill-mode:forwards;
 }
 
 @keyframes burstFall{
+
   0%{
-    transform:translate(-50%,-50%) scale(0.2) rotate(0deg);
+    transform:
+      translate(-50%,-50%)
+      scale(0.05)
+      rotate(0deg);
+
     opacity:0;
   }
 
-  18%{
+  7%{
     opacity:1;
+
+    transform:
+      translate(-50%,-50%)
+      scale(calc(var(--flower-scale) * 0.45))
+      rotate(30deg);
   }
 
-  55%{
+  25%{
     transform:
       translate(
         calc(-50% + var(--tx)),
         calc(-50% + var(--ty))
       )
-      scale(1)
+      scale(var(--flower-scale))
       rotate(var(--rot));
+
     opacity:1;
   }
 
-  100%{
+  48%{
+    transform:
+      translate(
+        calc(-50% + var(--tx) + var(--fx) * 0.45),
+        calc(-50% + var(--ty) + var(--fy) * 0.25)
+      )
+      scale(calc(var(--flower-scale) * 1.15))
+      rotate(calc(var(--rot) + 160deg));
+
+    opacity:1;
+  }
+
+  70%{
     transform:
       translate(
         calc(-50% + var(--tx) + var(--fx)),
         calc(-50% + var(--ty) + var(--fy))
       )
-      scale(0.85)
-      rotate(calc(var(--rot) + 60deg));
+      scale(calc(var(--flower-scale) * 0.95))
+      rotate(calc(var(--rot) + 340deg));
+
+    opacity:0.9;
+  }
+
+  87%{
+    transform:
+      translate(
+        calc(-50% + var(--tx) + var(--fx) * 1.35),
+        calc(-50% + var(--ty) + var(--fy) * 1.25)
+      )
+      scale(calc(var(--flower-scale) * 0.8))
+      rotate(calc(var(--rot) + 500deg));
+
+    opacity:0.55;
+  }
+
+  100%{
+    transform:
+      translate(
+        calc(-50% + var(--tx) + var(--fx) * 1.7),
+        calc(-50% + var(--ty) + var(--fy) * 1.6)
+      )
+      scale(calc(var(--flower-scale) * 0.5))
+      rotate(calc(var(--rot) + 720deg));
+
     opacity:0;
   }
 }
+
 
 /* ---------- CARD ---------- */
 
 .card-wrap{
   position:absolute;
 
-  /* Card size */
   width:370px;
   height:560px;
 
@@ -270,11 +385,14 @@ body::before{
   opacity:0;
   pointer-events:none;
 
-  transform:translateY(60px) scale(0.7);
+  transform:
+    translateY(100px)
+    scale(0.55)
+    rotate(-3deg);
 
   transition:
-    opacity 0.7s ease,
-    transform 0.9s cubic-bezier(.2,.9,.25,1.15);
+    opacity 0.65s ease 0.45s,
+    transform 1.15s cubic-bezier(.16,1.25,.3,1) 0.45s;
 
   z-index:2;
 }
@@ -282,12 +400,18 @@ body::before{
 .stage.card-out .card-wrap{
   opacity:1;
   pointer-events:auto;
-  transform:translateY(0) scale(1);
+
+  transform:
+    translateY(0)
+    scale(1)
+    rotate(0deg);
+
   z-index:6;
 }
 
 .card{
   position:relative;
+
   width:100%;
   height:100%;
 
@@ -311,7 +435,23 @@ body::before{
 
   border-radius:12px;
 
-  background:var(--ivory);
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(255,255,255,0.22),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgba(180,130,70,0.07),
+      transparent 40%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,0.08),
+      transparent 45%
+    ),
+    var(--ivory);
 
   box-shadow:
     0 30px 55px -18px rgba(0,0,0,0.55),
@@ -322,7 +462,27 @@ body::before{
   display:flex;
   flex-direction:column;
   align-items:center;
+
+  overflow:hidden;
 }
+
+.card-face::after{
+  content:"";
+
+  position:absolute;
+  inset:0;
+
+  pointer-events:none;
+
+  border-radius:12px;
+
+  opacity:0.035;
+
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+
+  mix-blend-mode:multiply;
+}
+
 
 /* ---------- FRONT ---------- */
 
@@ -359,12 +519,15 @@ body::before{
 .photo-frame .photo-img{
   width:100%;
   height:100%;
+
   object-fit:cover;
+
   display:block;
 }
 
 .washi{
   position:absolute;
+
   top:-10px;
   left:50%;
 
@@ -375,9 +538,11 @@ body::before{
   width:60px;
   height:22px;
 
-  background:rgba(224,118,140,0.55);
+  background:
+    rgba(224,118,140,0.55);
 
-  border:1px solid rgba(255,255,255,0.4);
+  border:
+    1px solid rgba(255,255,255,0.4);
 
   z-index:2;
 }
@@ -412,6 +577,7 @@ body::before{
   opacity:0.85;
 }
 
+
 /* ---------- BACK ---------- */
 
 .card-back{
@@ -424,6 +590,11 @@ body::before{
       circle at 85% 10%,
       rgba(200,155,92,0.12),
       transparent 40%
+    ),
+    radial-gradient(
+      circle at 15% 15%,
+      rgba(255,255,255,0.22),
+      transparent 32%
     ),
     var(--ivory);
 
@@ -447,21 +618,35 @@ body::before{
 .card-back .message{
   font-family:'Caveat', cursive;
 
-  /*
-    Smaller than before so the complete
-    message stays comfortably inside.
-  */
-  font-size:25px;
+  font-size:23px;
 
-  line-height:1.22;
+  line-height:1.3;
 
   color:var(--ink);
 
   width:100%;
 
-  flex:1;
+  transform:rotate(-0.3deg);
+}
 
-  overflow:hidden;
+.card-back .ps{
+  font-family:'Caveat', cursive;
+
+  font-size:23px;
+
+  line-height:1.3;
+
+  color:var(--ink);
+
+  width:100%;
+
+  margin-top:14px;
+  padding-top:10px;
+
+  border-top:
+    1px solid rgba(74,44,22,0.12);
+
+  transform:rotate(0.4deg);
 }
 
 .card-back .signoff{
@@ -469,12 +654,17 @@ body::before{
 
   font-family:'Caveat', cursive;
 
-  font-size:25px;
+  font-size:23px;
 
   color:var(--wine);
 
-  margin-top:8px;
+  margin-top:12px;
+
+  padding-right:2px;
+
+  transform:rotate(-1deg);
 }
+
 
 /* ---------- FLIP HINT ---------- */
 
@@ -498,7 +688,8 @@ body::before{
 
   opacity:0;
 
-  transition:opacity 0.6s ease 1.6s;
+  transition:
+    opacity 0.6s ease 1.6s;
 }
 
 .stage.card-out .flip-hint{
@@ -508,6 +699,7 @@ body::before{
 .card.flipped ~ .flip-hint{
   opacity:0;
 }
+
 
 /* ---------- MOBILE ---------- */
 
@@ -533,22 +725,24 @@ body::before{
   }
 
   .card-back{
-    padding:28px 26px;
+    padding:28px 24px;
   }
 
-  .card-back .message{
-    font-size:23px;
-    line-height:1.2;
+  .card-back .message,
+  .card-back .ps{
+    font-size:22px;
+    line-height:1.28;
   }
 
   .card-back .signoff{
-    font-size:24px;
+    font-size:23px;
   }
 
   .card-front .caption{
     font-size:19px;
   }
 }
+
 
 /* ---------- REDUCED MOTION ---------- */
 
